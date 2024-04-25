@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>Type your input here</p>
+    <textarea id="inputField" onkeypress="onTestChange()" rows="10" cols="50">
+    </textarea>
+    <button onclick="convertText()">Convert text</button>
+    <textarea id="outputField" rows="10" cols="50"> </textarea>
+
+    <script>
+      function onTestChange() {
+        var key = window.event.keyCode;
+
+        // If the user has pressed enter
+        if (key === 13) {
+          convertText();
+        } else {
+        }
+      }
+
+      function checkWord(word) {
+        let newWord = word.trim();
+        newWord = newWord.replaceAll('"', "");
+        newWord = newWord.replaceAll("'", "");
+        let uppercaseLetters = 0;
+        for (let letter of newWord) {
+          console.log(letter);
+          if (letter == letter.toUpperCase()) {
+            uppercaseLetters++;
+          }
+        }
+        if (uppercaseLetters > 1) {
+          newWord = newWord.toLowerCase();
+        }
+        return newWord;
+      }
+
+      function capitalizeFirstLetter(word) {
+        let firstChar = word.charAt(0).toUpperCase();
+        let remaining = word.substring(1);
+        return firstChar + remaining;
+      }
+
+      function convertText() {
+        let input = document.getElementById("inputField").value;
+        if (!input) {
+          alert("Please input a value!");
+        }
+
+        sentences = input.split(". ");
+        newSentences = [];
+        for (let x = 0; x < sentences.length; x++) {
+          let newSentence = [];
+          let words = sentences[x].split(" ");
+          for (let i = 0; i < words.length; i++) {
+            if (i < words.length - 1) {
+              newSentence.push(checkWord(words[i]) + " ");
+            } else {
+              newSentence.push(checkWord(words[i]));
+            }
+          }
+          newSentence[0] = capitalizeFirstLetter(newSentence[0]);
+          if (x < sentences.length - 1) {
+            newSentence.push(". ");
+          }
+          let newSentenceString = newSentence.join("");
+          newSentences.push(newSentenceString);
+          console.log(newSentence);
+        }
+        let newString = newSentences.join("");
+        let outputField = document.getElementById("outputField");
+        outputField.value = newString;
+        outputField.select();
+        outputField.focus();
+        navigator.clipboard.writeText(outputField.value);
+      }
+    </script>
+  </body>
+</html>
